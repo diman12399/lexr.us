@@ -39,11 +39,15 @@ autorestart=true
 
 ### API
 
-```curl -X POST -d "text_mode=1&url=http://www.apple.com/" http://lexr.us/api/url```
+```
+curl -X POST -d "text_mode=1&url=http://www.apple.com/" http://lexr.us/api/url
+```
 
 outputs:
 
-```http://lexr.us/A```
+```
+http://lexr.us/A
+```
 
 
 ### LICENSE
