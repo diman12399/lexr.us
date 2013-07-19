@@ -57,7 +57,7 @@ $(function () {
             data: form.serialize(),
             url: form.attr("action"),
             dataType: "json",
-            timeout: 300,
+            timeout: 30000,
             success: function (data, status, xhr) {
                 input.val(data.short_url ? data.short_url : data.long_url);
                 resetForm();
