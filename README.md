@@ -3,8 +3,7 @@
 An open source URL shortener built with love
 using [TornadoWeb](http://www.tornadoweb.org) / [Redis](http://redis.io/) / [PureCSS](http://purecss.io/) / [ZeptoJS](http://zeptojs.com).
 
-
-<Screenshot placeholder>
+![Screenshot](https://f.cloud.github.com/assets/219689/824974/8d41befa-f057-11e2-8ebc-8129357da309.png)
 
 
 ### Features
