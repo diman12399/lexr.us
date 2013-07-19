@@ -1,0 +1,9 @@
+# This file allows you to install LTShort and all it's dependencies
+# in a virtual environment.
+#
+# Use it like this:
+#
+#   pip install --ignore-installed -r requirements.txt
+
+tornado==3.1
+tornado-redis==2.4.2
