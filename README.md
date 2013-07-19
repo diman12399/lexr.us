@@ -16,7 +16,6 @@ using [TornadoWeb](http://www.tornadoweb.org) / [Redis](http://redis.io/) / [Pur
 * iOS 7-style, sleek and elegant interface ☜(ˆ▽ˆ)
 * Support all protocols not only http|https
 * Bleeding-edge performance
-* Support for deploying as a upstream for Apache or Nginx
 
 
 ### Requirements
@@ -24,6 +23,7 @@ using [TornadoWeb](http://www.tornadoweb.org) / [Redis](http://redis.io/) / [Pur
 * A Unix server
 * Python 2.7+
 * Redis database
+* Nginx is optional
 
 
 ### Running the server
@@ -40,6 +40,33 @@ command=/usr/local/bin/python app.py --logging=none
 directory=/var/www/lexr.us/
 autostart=true
 autorestart=true
+```
+
+#### Nginx config example
+
+```
+upstream lexrus {
+    server localhost:1983;
+}
+
+server {
+    listen       80;
+    server_name  lexr.us www.lexr.us;
+
+    location / {
+        proxy_buffers 8 16k;
+        proxy_buffer_size 32k;
+
+        proxy_read_timeout 50s;
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://lexrus;
+        break;
+    }
+}
 ```
 
 ### API

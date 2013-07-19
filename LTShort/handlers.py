@@ -12,7 +12,7 @@ def base62_encode(number):
     return ''.join(reversed(base62))
 
 
-class LTAPIHandler(web.RedirectHandler):
+class LTAPIHandler(web.RequestHandler):
     @property
     def db(self):
         return self.settings['db_client']
@@ -93,8 +93,8 @@ class LTRedirectHandler(LTAPIHandler):
     @gen.engine
     def get(self):
         short_id = self.request.path[1:]
-        url = yield gen.Task(self.db.get, 'url:' + short_id)
+        url = yield gen.Task(self.db.get, 'url-target:' + short_id)
         if url:
-            self.redirect(url[0], permanent=True)
+            self.redirect(url, permanent=True)
         else:
             self.write_error(404)
