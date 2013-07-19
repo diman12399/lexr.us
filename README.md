@@ -6,6 +6,11 @@ using [TornadoWeb](http://www.tornadoweb.org) / [Redis](http://redis.io/) / [Pur
 ![Screenshot](https://f.cloud.github.com/assets/219689/824974/8d41befa-f057-11e2-8ebc-8129357da309.png)
 
 
+### Live Demo
+
+[lexr.us](http://lexr.us) is running on my Mac Mini Server hosted at MacMiniVault.com
+
+
 ### Features
 
 * iOS 7-style, sleek and elegant interface ☜(ˆ▽ˆ)
