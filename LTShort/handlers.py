@@ -57,8 +57,7 @@ class LTShortURLHandler(LTAPIHandler):
 
         url = url[0:2048]
         url_parts = urlparse(url)
-        url_not_valid = not url_parts.scheme or not url_parts.netloc
-        if url_not_valid:
+        if not url_parts.scheme or not url_parts.netloc:
             self.send_error(400)
             return
 
