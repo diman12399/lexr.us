@@ -29,6 +29,8 @@ lexr.us app
 
 __author__ = 'lex'
 
+import os
+import pwd
 from tornado import web, ioloop, httpserver
 from tornado.options import options, define
 from LTShort import handlers
@@ -40,47 +42,60 @@ define('host', default='lexr.us', type=str, help='server host name')
 define('template_path', default='tpl', type=str, help='template path')
 define('redis_host', default='127.0.0.1', type=str, help='Redis server host')
 define('redis_port', default=6379, type=int, help='Redis server port')
+define('user', default='', type=str, help='user')
+define('group', default='', type=str, help='group')
 
 
 class LTShort(web.Application):
     def __init__(self):
-        routes = [
-            (r'/(.{0})', web.StaticFileHandler, {
-                'path': 'public',
-                'default_filename': 'index.html'
-            }),
-            (r'/public/(.*)', web.StaticFileHandler, {
-                'path': 'public'
-            }),
-            (r'/(favicon\.ico)', web.StaticFileHandler, {
-                'path': 'public'
-            }),
-            (r'/api/url', handlers.LTShortURLHandler),
-            (r'/.*', handlers.LTRedirectHandler),
-        ]
-
         connection_pool = tornadoredis.ConnectionPool(max_connections=500, wait_for_available=True)
         db_client = tornadoredis.Client(host=options.redis_host, port=options.redis_port)
         db_client.connect()
-
         settings = {
             'gzip': True,
             'autoescape': 'xhtml_escape',
             'db_client': db_client,
             'connection_pool': connection_pool,
             'template_path': options.template_path,
-            'host': options.host
+            'host': options.host,
+            "static_path": os.path.join(os.path.dirname(__file__), "public"),
         }
+        routes = [
+            (r'/(.{0})', web.StaticFileHandler, {
+                'path': settings['static_path'],
+                'default_filename': 'index.html'
+            }),
+            (r'/public/(.*)', web.StaticFileHandler, {
+                'path': settings['static_path'],
+            }),
+            (r'/(favicon\.ico)', web.StaticFileHandler, {
+                'path': settings['static_path'],
+            }),
+            (r'/api/url', handlers.LTShortURLHandler),
+            (r'/.*', handlers.LTRedirectHandler),
+        ]
+
+
 
         web.Application.__init__(self, routes, **settings)
 
 
-if __name__ == '__main__':
+def main():
     options.parse_command_line()
+    if options.group:
+        # define group to run as
+        run_as_group = options.group
+        gid = pwd.getpwnam(run_as_group)[3]
+        os.setgid(gid)
+    if options.user:
+        # define user to run as
+        run_as_user = options.user
+        uid = pwd.getpwnam(run_as_user)[2]
+        os.setuid(uid)
+
     app = LTShort()
     server = httpserver.HTTPServer(app)
     server.listen(options.port)
-    print "LTShort > http://%s:%i/" % (options.host, options.port)
 
     # server.bind(options.port, address=options.host)
 
@@ -90,3 +105,6 @@ if __name__ == '__main__':
     loop = ioloop.IOLoop.instance()
 
     loop.start()
+
+if __name__ == '__main__':
+    main()

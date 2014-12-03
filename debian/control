@@ -1,0 +1,19 @@
+Source: lexr.us
+Section: python
+Priority: extra
+Maintainer: Dmitry Makushin <d.makushin@eastwoodlab.ru>
+Build-Depends:
+  python-setuptools (>= 0.6b3),
+  python-virtualenv,
+  python-all (>= 2.6.6-3),
+  python-dev,
+  debhelper (>= 7.4.3),
+  cdbs,
+  python-support (>=1.0),
+  python-all-dev,
+Standards-Version: 3.9.1
+
+Package: lexr.us
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, python-setuptools (>= 0.6b3), zip
+Description: url shortener

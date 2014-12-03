@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+PROJECT_NAME = lexr.us
+DEB_DH_INSTALLINIT_ARGS = --no-start
+DEPENDS_DIR_NAME = $(CURDIR)/opt/lexr.us
+DEPENDS_DIR_PATH = /opt/$(PROJECT_NAME)/$(DEPENDS_DIR_NAME)
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+clean::
+	rm -rf bin/ build/ dist/ $(DEPENDS_DIR_NAME) 
+
+build:
+	# Fix version in setup.py
+	sed -i "s/\(version=\).*/\1'$(DEB_VERSION)',/" $(CURDIR)/setup.py
+	mkdir -p $(DEPENDS_DIR_NAME)
+
+	# Setup package metadata
+	PYTHONPATH=$(DEPENDS_DIR_NAME) python setup.py egg_info
+
+	# Install dependencies
+	#pip install --target $(DEPENDS_DIR_NAME) --compile --no-use-wheel .
+	PYTHONPATH=$(DEPENDS_DIR_NAME) python setup.py install --install-lib=$(DEPENDS_DIR_NAME) --install-data=$(DEPENDS_DIR_NAME) --install-scripts=$(DEPENDS_DIR_NAME)
