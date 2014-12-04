@@ -60,16 +60,6 @@ class LTShort(web.Application):
             "static_path": os.path.join(os.path.dirname(__file__), "public"),
         }
         routes = [
-            (r'/(.{0})', web.StaticFileHandler, {
-                'path': settings['static_path'],
-                'default_filename': 'index.html'
-            }),
-            (r'/public/(.*)', web.StaticFileHandler, {
-                'path': settings['static_path'],
-            }),
-            (r'/(favicon\.ico)', web.StaticFileHandler, {
-                'path': settings['static_path'],
-            }),
             (r'/api/url', handlers.LTShortURLHandler),
             (r'/.*', handlers.LTRedirectHandler),
         ]
