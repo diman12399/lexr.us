@@ -10,29 +10,10 @@
 </head>
 <body>
 <div class="pure-g-r">
-    <div class="pure-u-1 header">
-        <h1>lexr.us</h1>
-        <h4 class="slogan">An open source URL shortener built with love<br/>
-            using TornadoWeb / Redis / PureCSS / ZeptoJS</h4>
-    </div>
     <form action="/api/url" method="post" class="pure-form pure-u-1">
         <input type="text" name="url" placeholder="Feed me URL please... (◕﹏◕✿)" class="pure-input-1" id="url-input"/>
         <button type="submit" class="pure-button pure-button-primary">Shorten</button>
     </form>
-    <footer class="pure-g-r">
-        <div class="pure-u-1">
-            <a href="https://github.com/lexrus/lexr.us">Fork lexr.us on GitHub</a>
-        </div>
-        <div class="pure-u-1 cli">
-            <pre>
-# Calling API from command line
-curl -X POST -d "text_mode=1&amp;url=http://www.apple.com/" http://lexr.us/api/url
-            </pre>
-        </div>
-        <div class="pure-u-1">
-            &copy; 2014 lexr.us. All rights reserved.
-        </div>
-    </footer>
 </div>
 </body>
 </html>
