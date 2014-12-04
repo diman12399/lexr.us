@@ -65,3 +65,4 @@ lexr.us-*.tar.gz
 lexr.us-*.asc
 
 *.swp
+.ropeproject

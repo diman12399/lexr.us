@@ -14,10 +14,6 @@ def base62_encode(number):
 
 class LTAPIHandler(web.RequestHandler):
     @property
-    def db(self):
-        return self.settings['db_client']
-
-    @property
     def pool(self):
         return self.settings['connection_pool']
 
@@ -62,7 +58,9 @@ class LTShortURLHandler(LTAPIHandler):
             return
 
         if url_parts.netloc == self.settings['host']:
-            expanded = yield gen.Task(self.db.get, 'url-target:' + url_parts.path[1:])
+            cp = tornadoredis.Client(connection_pool=self.pool)
+            expanded = yield gen.Task(cp.get, 'url-target:' + url_parts.path[1:])
+            yield gen.Task(cp.disconnect)
             if expanded:
                 if self.text_mode:
                     self.finish(expanded)
@@ -73,7 +71,9 @@ class LTShortURLHandler(LTAPIHandler):
                 self.send_error(404)
                 return
 
-        short_id = yield gen.Task(self.db.get, 'reverse-url:' + url)
+        cp = tornadoredis.Client(connection_pool=self.pool)
+        short_id = yield gen.Task(cp.get, 'reverse-url:' + url)
+        yield gen.Task(cp.disconnect)
         if short_id:
             self.finish(self._compose_short_url_by_short_id(short_id))
         else:
@@ -92,7 +92,9 @@ class LTRedirectHandler(LTAPIHandler):
     @gen.engine
     def get(self):
         short_id = self.request.path[1:]
-        url = yield gen.Task(self.db.get, 'url-target:' + short_id)
+        cp = tornadoredis.Client(connection_pool=self.pool)
+        url = yield gen.Task(cp.get, 'url-target:' + short_id)
+        yield gen.Task(cp.disconnect)
         if url:
             self.redirect(url, permanent=True)
         else:

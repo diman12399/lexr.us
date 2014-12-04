@@ -39,6 +39,8 @@ import tornadoredis
 
 define('port', default=1983, type=int, help='server port')
 define('host', default='lexr.us', type=str, help='server host name')
+define('listen', default='0.0.0.0', type=str, help='listen interface')
+define('num_processes', default=1, type=int, help='number of subprocesses(0 - auto)')
 define('template_path', default='tpl', type=str, help='template path')
 define('redis_host', default='127.0.0.1', type=str, help='Redis server host')
 define('redis_port', default=6379, type=int, help='Redis server port')
@@ -48,13 +50,10 @@ define('group', default='', type=str, help='group')
 
 class LTShort(web.Application):
     def __init__(self):
-        connection_pool = tornadoredis.ConnectionPool(max_connections=500, wait_for_available=True)
-        db_client = tornadoredis.Client(host=options.redis_host, port=options.redis_port)
-        db_client.connect()
+        connection_pool = tornadoredis.ConnectionPool(max_connections=500, wait_for_available=True, host=options.redis_host, port=options.redis_port)
         settings = {
             'gzip': True,
             'autoescape': 'xhtml_escape',
-            'db_client': db_client,
             'connection_pool': connection_pool,
             'template_path': options.template_path,
             'host': options.host,
@@ -95,16 +94,10 @@ def main():
 
     app = LTShort()
     server = httpserver.HTTPServer(app)
-    server.listen(options.port)
+    server.bind(options.port, options.listen)
+    server.start(options.num_processes)
 
-    # server.bind(options.port, address=options.host)
-
-    # start(0) starts a subprocess for each CPU core
-    # server.start(1 if options.debug else 0)
-
-    loop = ioloop.IOLoop.instance()
-
-    loop.start()
+    ioloop.IOLoop.instance().start()
 
 if __name__ == '__main__':
     main()
