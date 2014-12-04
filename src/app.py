@@ -46,6 +46,7 @@ define('redis_host', default='127.0.0.1', type=str, help='Redis server host')
 define('redis_port', default=6379, type=int, help='Redis server port')
 define('user', default='', type=str, help='user')
 define('group', default='', type=str, help='group')
+define('allowed_hosts', default='*', type=str, help='allowed hosts, comma-separated values', multiple=True)
 
 
 class LTShort(web.Application):
@@ -57,7 +58,8 @@ class LTShort(web.Application):
             'connection_pool': connection_pool,
             'template_path': options.template_path,
             'host': options.host,
-            "static_path": os.path.join(os.path.dirname(__file__), "public"),
+            'static_path': os.path.join(os.path.dirname(__file__), "public"),
+            'allowed_hosts': options.allowed_hosts,
         }
         routes = [
             (r'/(.{0})', web.StaticFileHandler, {

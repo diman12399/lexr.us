@@ -1,5 +1,7 @@
+import fnmatch
 from urlparse import urlparse
 from tornado import web, gen
+
 import tornadoredis
 
 
@@ -70,6 +72,13 @@ class LTShortURLHandler(LTAPIHandler):
             else:
                 self.send_error(404)
                 return
+
+        for pattern in self.settings['allowed_hosts']:
+            if fnmatch.fnmatch(url_parts.netloc, pattern):
+                break
+        else:
+            self.send_error(400)
+            return
 
         cp = tornadoredis.Client(connection_pool=self.pool)
         short_id = yield gen.Task(cp.get, 'reverse-url:' + url)

@@ -9,5 +9,5 @@ env RUNNER="/usr/bin/lexr.us"
 script
 set -a
 . $DEFAULTS
-exec $RUNNER --host=$HOST --port=$PORT --logging=$LOGGING --user=$USER --group=$GROUP --log_file_prefix=$LOG_PREFIX --redis_host=$REDIS_HOST --redis_port=$REDIS_PORT --listen=$LISTEN --num_processes=$NUM_PROCESSES
+exec $RUNNER --host=$HOST --port=$PORT --logging=$LOGGING --user=$USER --group=$GROUP --log_file_prefix=$LOG_PREFIX --redis_host=$REDIS_HOST --redis_port=$REDIS_PORT --listen=$LISTEN --num_processes=$NUM_PROCESSES --allowed_hosts=$ALLOWED_HOSTS
 end script

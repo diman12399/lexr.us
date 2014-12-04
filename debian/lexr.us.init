@@ -23,7 +23,7 @@ DEFAULTS="/etc/default/lexr.us"
 if [ -f $DEFAULTS ] ; then
 	. $DEFAULTS
 fi
-DAEMON_OPTS="--host=$HOST --port=$PORT --logging=$LOGGING --user=$USER --group=$GROUP --log_file_prefix=$LOG_PREFIX --redis_host=$REDIS_HOST --redis_port=$REDIS_PORT --listen=$LISTEN --num_processes=$NUM_PROCESSES"
+DAEMON_OPTS="--host=$HOST --port=$PORT --logging=$LOGGING --user=$USER --group=$GROUP --log_file_prefix=$LOG_PREFIX --redis_host=$REDIS_HOST --redis_port=$REDIS_PORT --listen=$LISTEN --num_processes=$NUM_PROCESSES --allowed_hosts=$ALLOWED_HOSTS"
 
 case "$1" in
   start)
